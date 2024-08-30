@@ -1,0 +1,19 @@
+title: MetaBlog
+description: MetaBlog is a blog about the future of technology and innovation.
+theme: minima
+
+# Build settings
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - main.py
+  - requirements.txt
