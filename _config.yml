@@ -6,6 +6,10 @@ theme: minima
 markdown: kramdown
 permalink: /:year/:month/:day/:title/
 
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
 # Exclude from processing
 exclude:
   - Gemfile
