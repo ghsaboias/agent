@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.PAT }}
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -17,7 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install groq colorama scikit-learn
     - name: Check run count
       id: check_runs
       run: |
@@ -40,9 +43,11 @@ jobs:
         git config --global user.name "GitHub Action"
         git add -A
         git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generated blog post" && git push)
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}
     - name: Disable workflow
       if: steps.check_runs.outputs.max_runs_reached == 'true'
       run: |
         gh workflow disable "Generate Blog Post"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
