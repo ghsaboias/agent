@@ -60,7 +60,7 @@ def generate_topic(max_iterations=2):
             time.sleep(1)  # Short delay between agents
     
     # Final topic selection
-    final_prompt = "Based on our brainstorming session, what's the most interesting and specific topic we've come up with for the blog post? Provide a concise topic statement and a brief outline of key points to cover."
+    final_prompt = "Based on our brainstorming session, what's the most interesting and specific topic we've come up with for the blog post? Provide a concise topic statement, preferably in a single line. If multiple lines are necessary, keep it brief and clear."
     final_topic, _ = generate_response(messages + [{"role": "user", "content": final_prompt}], "Topic Selector")
     
     return final_topic.strip() if final_topic else "The impact of technology on modern society"
@@ -148,8 +148,9 @@ def save_blog_post(content, topic):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write("---\n")
         f.write(f"layout: post\n")
-        f.write(f"title: \"{topic}\"\n")
-        f.write(f"date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0000\n")
+        f.write("title: |\n  ")  # Use | for literal block scalar
+        f.write(topic.replace("\n", "\n  "))  # Indent each line of the title
+        f.write(f"\ndate: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0000\n")
         f.write(f"categories: [{categories_str}]\n")
         f.write("---\n\n")
         f.write(content)
