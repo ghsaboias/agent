@@ -2,7 +2,7 @@ name: Generate Blog Post
 
 on:
   schedule:
-    - cron: '*/3 * * * *'  # Run every 3 minutes
+    - cron: '*/60 * * * *'  # Run every 3 minutes
   workflow_dispatch:  # Allow manual triggering
 
 jobs:

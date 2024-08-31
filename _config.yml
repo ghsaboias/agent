@@ -1,5 +1,7 @@
 title: MetaBlog
 description: MetaBlog is a blog about the future of technology and innovation.
+url: "https://ghsaboias.github.io"
+baseurl: "/agent"
 theme: minima
 
 # Build settings
