@@ -136,22 +136,22 @@ def extract_categories(content, num_categories=3):
     return categories
 
 def save_blog_post(content, topic):
-    """Save the blog post as a Markdown file in the posts directory with a date-based name and dynamic categories."""
+    """Save the blog post as a Markdown file in the _posts directory with a date-based name and dynamic categories."""
     date_str = datetime.now().strftime("%Y-%m-%d")
-    posts_dir = "posts"
+    posts_dir = "_posts"
     os.makedirs(posts_dir, exist_ok=True)
     filename = f"{posts_dir}/{date_str}-{topic.replace(' ', '-').lower()[:30]}.md"
     
     categories = extract_categories(content)
-    categories_str = ", ".join(categories)
+    categories_str = ", ".join([f'"{cat}"' for cat in categories])
     
     with open(filename, 'w', encoding='utf-8') as f:
-        f.write(f"---\n")
+        f.write("---\n")
         f.write(f"layout: post\n")
         f.write(f"title: \"{topic}\"\n")
         f.write(f"date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0000\n")
         f.write(f"categories: [{categories_str}]\n")
-        f.write(f"---\n\n")
+        f.write("---\n\n")
         f.write(content)
     return filename, categories
 

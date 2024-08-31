@@ -36,6 +36,14 @@ jobs:
       env:
         GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       run: python main.py
+    - name: Check generated files
+      if: steps.check_runs.outputs.max_runs_reached == 'false'
+      run: |
+        for file in _posts/*.md; do
+          echo "Checking file: $file"
+          head -n 10 "$file"
+          echo "---"
+        done
     - name: Commit and push if changed
       if: steps.check_runs.outputs.max_runs_reached == 'false'
       run: |
@@ -45,6 +53,11 @@ jobs:
         git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generated blog post" && git push)
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
+    - name: Build and deploy Jekyll site
+      run: |
+        sudo gem install bundler jekyll
+        bundle install
+        bundle exec jekyll build
     - name: Disable workflow
       if: steps.check_runs.outputs.max_runs_reached == 'true'
       run: |
