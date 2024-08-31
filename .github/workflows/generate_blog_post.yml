@@ -2,12 +2,14 @@ name: Generate Blog Post
 
 on:
   schedule:
-    - cron: '*/60 * * * *'  # Run every 3 minutes
+    - cron: '*/60 * * * *'  # Run every 60 minutes
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
   generate-blog-post:
     runs-on: ubuntu-latest
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -21,29 +23,10 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install groq colorama scikit-learn
-    - name: Check run count
-      id: check_runs
-      run: |
-        run_count=$(git log --oneline --grep="Auto-generated blog post" | wc -l)
-        echo "run_count=$run_count" >> $GITHUB_OUTPUT
-        if [ $run_count -ge 10 ]; then
-          echo "max_runs_reached=true" >> $GITHUB_OUTPUT
-        else
-          echo "max_runs_reached=false" >> $GITHUB_OUTPUT
-        fi
     - name: Generate blog post
-      if: steps.check_runs.outputs.max_runs_reached == 'false'
-      env:
-        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      run: python main.py
-    - name: Check generated files
-      if: steps.check_runs.outputs.max_runs_reached == 'false'
       run: |
-        for file in _posts/*.md; do
-          echo "Checking file: $file"
-          head -n 10 "$file"
-          echo "---"
-        done
+        echo "GROQ_API_KEY is set: ${{ env.GROQ_API_KEY != '' }}"
+        python main.py
     - name: Commit and push changes
       run: |
         git config --global user.name 'GitHub Action'
@@ -53,16 +36,5 @@ jobs:
         python main.py
         git add -A
         git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generated blog post" && git push origin master)
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-    - name: Build and deploy Jekyll site
-      run: |
-        sudo gem install bundler jekyll
-        bundle install
-        bundle exec jekyll build
-    - name: Disable workflow
-      if: steps.check_runs.outputs.max_runs_reached == 'true'
-      run: |
-        gh workflow disable "Generate Blog Post"
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
