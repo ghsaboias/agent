@@ -53,7 +53,7 @@ jobs:
         git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generated blog post" && git push)
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
-    - name: Build Jekyll site
+    - name: Build and deploy Jekyll site
       run: |
         sudo gem install bundler jekyll
         bundle install
