@@ -14,8 +14,8 @@ This project uses AI to automatically generate and publish blog posts about tech
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/ghsaboias/agent.git
+   cd agent
    ```
 
 2. Install the required Python packages:

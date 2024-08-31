@@ -26,7 +26,7 @@ jobs:
       run: |
         run_count=$(git log --oneline --grep="Auto-generated blog post" | wc -l)
         echo "run_count=$run_count" >> $GITHUB_OUTPUT
-        if [ $run_count -ge 3 ]; then
+        if [ $run_count -ge 10 ]; then
           echo "max_runs_reached=true" >> $GITHUB_OUTPUT
         else
           echo "max_runs_reached=false" >> $GITHUB_OUTPUT
