@@ -60,7 +60,7 @@ def generate_topic(max_iterations=2):
             time.sleep(1)  # Short delay between agents
     
     # Final topic selection
-    final_prompt = "Based on our brainstorming session, what's the most interesting and specific topic we've come up with for the blog post? Provide a concise topic statement, preferably in a single line. If multiple lines are necessary, keep it brief and clear."
+    final_prompt = "Based on our brainstorming session, what's the most interesting and specific topic we've come up with for the blog post? Provide a concise topic statement in a single line, without any introductory phrases."
     final_topic, _ = generate_response(messages + [{"role": "user", "content": final_prompt}], "Topic Selector")
     
     return final_topic.strip() if final_topic else "The impact of technology on modern society"
@@ -121,7 +121,7 @@ def final_review(content, fact_check_results, keywords, citations):
     """Final review agent to incorporate fact-check results and add finishing touches."""
     review_prompt = [
         {"role": "system", "content": "You are an expert editor and content reviewer. Your task is to review the given blog post, incorporate fact-check results, and add final touches to improve the overall quality."},
-        {"role": "user", "content": f"Please review the following blog post and incorporate the fact-check results:\n\nBlog post:\n{content}\n\nFact-check results:\n{fact_check_results}\n\nExtracted keywords for SEO: {', '.join(keywords)}\n\nMake necessary adjustments, ensuring:\n1. Clarity of ideas\n2. High engagement factor\n3. Effective use of examples and explanations\n4. Appropriateness for a general audience interested in technology and innovation\n5. Proper formatting\n6. A brief, engaging conclusion if it's missing\n7. Natural incorporation of SEO keywords without compromising readability\n8. Inclusion of the following citations at the end of the post:\n\n{citations}\n\nMaintain the content's originality and excitement. Return the final version in markdown format."}
+        {"role": "user", "content": f"Please review the following blog post and incorporate the fact-check results:\n\nBlog post:\n{content}\n\nFact-check results:\n{fact_check_results}\n\nExtracted keywords for SEO: {', '.join(keywords)}\n\nMake necessary adjustments, ensuring:\n1. Clarity of ideas\n2. High engagement factor\n3. Effective use of examples and explanations\n4. Appropriateness for a general audience interested in technology and innovation\n5. Proper formatting\n6. A brief, engaging conclusion if it's missing\n7. Natural incorporation of SEO keywords without compromising readability\n8. Inclusion of the following citations at the end of the post:\n\n{citations}\n\nMaintain the content's originality and excitement. Return the final version in markdown format, starting directly with the content without any introductory phrases."}
     ]
     final_content, review_time = generate_response(review_prompt, "Final Reviewer")
     return final_content, review_time
@@ -148,9 +148,8 @@ def save_blog_post(content, topic):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write("---\n")
         f.write(f"layout: post\n")
-        f.write("title: |\n  ")  # Use | for literal block scalar
-        f.write(topic.replace("\n", "\n  "))  # Indent each line of the title
-        f.write(f"\ndate: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0000\n")
+        f.write(f"title: \"{topic}\"\n")  # Use double quotes to ensure proper YAML formatting
+        f.write(f"date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} +0000\n")
         f.write(f"categories: [{categories_str}]\n")
         f.write("---\n\n")
         f.write(content)
