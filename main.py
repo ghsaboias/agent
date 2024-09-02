@@ -183,7 +183,7 @@ if __name__ == "__main__":
         run_count = increment_run_count()
         logger.info(f"Starting blog post generation process (Run {run_count}/3)")
         
-        if run_count > 3:
+        if run_count > 10:
             logger.info("Maximum number of runs reached. Exiting.")
             exit(0)
         
