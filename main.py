@@ -93,8 +93,8 @@ def content_researcher(topic):
 def content_writer(topic, research):
     """Content writer agent to create the main body of the blog post."""
     writer_prompt = [
-        {"role": "system", "content": "You are an expert content writer specializing in technology and innovation blog posts. Your task is to create engaging, informative content based on the given topic and research. Write as if for a final publication - do not include any meta-comments, questions to the user, or references to the writing process itself."},
-        {"role": "user", "content": f"Write a comprehensive blog post on the following topic:\n\n{topic}\n\nUse the following research to inform your writing:\n\n{research}\n\nEnsure the content is well-structured, engaging, and informative. Use markdown formatting for headers and emphasis. The post should be complete and ready for publication without any additional comments or questions."}
+        {"role": "system", "content": "You are an expert content writer specializing in technology and innovation blog posts. Your task is to create engaging, informative content based on the given topic and research. Write as if for a final publication - do not include any meta-comments, questions to the user, or references to the writing process itself. Do not use placeholders or incomplete sentences. If you mention a specific example, provide the actual example rather than indicating where one should be inserted."},
+        {"role": "user", "content": f"Write a comprehensive blog post on the following topic:\n\n{topic}\n\nUse the following research to inform your writing:\n\n{research}\n\nEnsure the content is well-structured, engaging, and informative. Use markdown formatting for headers and emphasis. The post should be complete and ready for publication without any additional comments, questions, or placeholders."}
     ]
     blog_content, writing_time = generate_response(writer_prompt, "Content Writer")
     return clean_content(blog_content), writing_time
