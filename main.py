@@ -27,7 +27,7 @@ def generate_response(messages, role):
         start_time = time.time()
         chat_completion = client.chat.completions.create(
             messages=messages,
-            model="gemma2-9b-it",
+            model="llama-3.1-70b-versatile",
             max_tokens=1000,
             temperature=0.7,
         )
@@ -67,9 +67,15 @@ def generate_topic(max_iterations=2):
 
 def generate_citations(research_content):
     """Extract potential citations from research content."""
-    citations = re.findall(r'\b(?:According to|As stated by|In the words of)\s+([^,\.]+)', research_content)
-    formatted_citations = [f"- {citation}" for citation in set(citations)]
-    return "\n".join(formatted_citations)
+    try:
+        citations = re.findall(r'\b(?:According to|As stated by|In the words of)\s+([^,\.]+)', research_content)
+        if not citations:
+            logger.warning("No citations found in the research content.")
+        formatted_citations = [f"- {citation}" for citation in set(citations)]
+        return "\n".join(formatted_citations)
+    except Exception as e:
+        logger.error(f"Error extracting citations: {e}")
+        return ""
 
 def extract_keywords(content, num_keywords=5):
     """Extract key topics from the content for SEO optimization."""
