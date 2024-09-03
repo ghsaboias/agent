@@ -57,7 +57,7 @@ def generate_topic(max_iterations=2):
             else:
                 logger.warning(f"Failed to generate response for Creative Agent {agent}. Continuing with next agent.")
             
-            time.sleep(1)  # Short delay between agents
+            time.sleep(2)  # Short delay between agents
     
     # Final topic selection
     final_prompt = "Based on our brainstorming session, what's the most interesting and specific topic we've come up with for the blog post? Provide a concise topic statement in a single line, without any introductory phrases."
